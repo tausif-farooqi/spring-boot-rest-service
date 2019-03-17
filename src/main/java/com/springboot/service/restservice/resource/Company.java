@@ -1,4 +1,10 @@
-package com.springboot.service.restservice.company;
+package com.springboot.service.restservice.resource;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A simple class depicting a company whose stocks are traded in stock markets.
@@ -6,9 +12,22 @@ package com.springboot.service.restservice.company;
  * @author Tausif Farooqi
  *
  */
+@ApiModel(description="The company whose stocks are traded at NASDAQ")
+@Entity
 public class Company {
+	@Id
+	@ApiModelProperty(required=true, notes="The stock ticker symbol of the company")
 	private String symbol;
+	
+	@ApiModelProperty(required=true, notes="The name of the company")
 	private String name;
+	
+	/**
+	 * 
+	 */
+	public Company() {
+		
+	}
 	
 	/**
 	 * @param symbol Company stock ticker symbol

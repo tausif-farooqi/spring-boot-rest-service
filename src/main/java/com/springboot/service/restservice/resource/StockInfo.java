@@ -1,6 +1,10 @@
-package com.springboot.service.restservice.company;
+package com.springboot.service.restservice.resource;
 
 import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Class that depicts stock information for a symbol on a specified date.
@@ -8,8 +12,11 @@ import java.util.Date;
  * @author Tausif Farooqi
  *
  */
+@Entity
 public class StockInfo {
-	private String symbol;
+	@Id
+	@GeneratedValue
+	Integer id;
 	private Date date;
 	private int volume;
 	private double openValue;
@@ -18,7 +25,6 @@ public class StockInfo {
 	private double lowValue;
 	
 	/**
-	 * @param symbol Stock ticker symbol
 	 * @param date Stock trade date
 	 * @param volume Stock's trade volume on the given date
 	 * @param openValue Stock's opening value on the given date
@@ -26,29 +32,20 @@ public class StockInfo {
 	 * @param highValue Stock's highest value on the given date 
 	 * @param lowValue Stock's lowest value on the given date
 	 */
-	public StockInfo(String symbol, 
-			Date date, 
+	public StockInfo(
+			Date date,
 			int volume, 
 			double openValue, 
 			double closeValue, 
 			double highValue,
 			double lowValue) {
 		super();
-		this.symbol = symbol;
 		this.date = date;
 		this.volume = volume;
 		this.openValue = openValue;
 		this.closeValue = closeValue;
 		this.highValue = highValue;
 		this.lowValue = lowValue;
-	}
-
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
 	}
 
 	public Date getDate() {
@@ -97,5 +94,13 @@ public class StockInfo {
 
 	public void setLowValue(double lowValue) {
 		this.lowValue = lowValue;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
