@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,13 +21,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.springboot.service.restservice.config.ServiceConfiguration;
 import com.springboot.service.restservice.repository.CompanyRepository;
 import com.springboot.service.restservice.resource.Company;
+import com.springboot.service.restservice.resource.CompanyResource;
 
 /**
  * Controller class that allows operations on the Company resource. We can get/add/update/delete 
- * company information here as well as stock history information for the given company.
+ * company information here.
  * 
  * @author Tausif Farooqi
  *
@@ -37,15 +39,13 @@ public class CompanyController {
 	@Autowired
 	private CompanyRepository companyRepository;
 	
-	@Autowired
-	private ServiceConfiguration configuration;
-	
 	/**
 	 * @return
 	 */
 	@GetMapping("/companies")
-	public List<Company> getAllCompanies() {
-		return companyRepository.findAll();
+	public List<Company> getAllCompanies(Pageable pageable) {
+		Page<Company> companies = companyRepository.findAll(pageable);
+		return companies.getContent();
 	}
 	
 	/**
@@ -53,14 +53,14 @@ public class CompanyController {
 	 * @return
 	 */
 	@GetMapping("/companies/{symbol}")
-	public Company getCompany(@PathVariable String symbol) {
+	public CompanyResource getCompany(@PathVariable String symbol) {
 		Optional<Company> company = companyRepository.findById(symbol);
 		
 		if (!company.isPresent()) {
 			// throw exception
 		}
 		
-		return company.get();
+		return new CompanyResource(company.get());
 	}
 	
 	/**
@@ -87,6 +87,9 @@ public class CompanyController {
 		
 	}
 	
+	/**
+	 * @param symbol
+	 */
 	@DeleteMapping("/companies/{symbol}")
 	public void deleteCompany(@PathVariable String symbol) {
 		companyRepository.deleteById(symbol);

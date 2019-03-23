@@ -23,6 +23,7 @@ public class StockInfo {
 	private double closeValue;
 	private double highValue;
 	private double lowValue;
+	private String symbol;
 	
 	/**
 	 * @param date Stock trade date
@@ -31,6 +32,7 @@ public class StockInfo {
 	 * @param closeValue Stock's closing value on the given date
 	 * @param highValue Stock's highest value on the given date 
 	 * @param lowValue Stock's lowest value on the given date
+	 * @param symbol The stock ticker symbol of the company
 	 */
 	public StockInfo(
 			Date date,
@@ -38,7 +40,8 @@ public class StockInfo {
 			double openValue, 
 			double closeValue, 
 			double highValue,
-			double lowValue) {
+			double lowValue,
+			String symbol) {
 		super();
 		this.date = date;
 		this.volume = volume;
@@ -46,6 +49,7 @@ public class StockInfo {
 		this.closeValue = closeValue;
 		this.highValue = highValue;
 		this.lowValue = lowValue;
+		this.symbol = symbol;
 	}
 
 	public Date getDate() {
@@ -102,5 +106,13 @@ public class StockInfo {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 }
