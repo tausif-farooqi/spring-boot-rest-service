@@ -1,7 +1,6 @@
 package com.springboot.service.restservice.controller;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.springboot.service.restservice.repository.CompanyRepository;
+import com.springboot.service.restservice.resource.CompaniesResource;
 import com.springboot.service.restservice.resource.Company;
 import com.springboot.service.restservice.resource.CompanyResource;
 
@@ -43,9 +43,9 @@ public class CompanyController {
 	 * @return
 	 */
 	@GetMapping("/companies")
-	public List<Company> getAllCompanies(Pageable pageable) {
+	public CompaniesResource getAllCompanies(Pageable pageable) {
 		Page<Company> companies = companyRepository.findAll(pageable);
-		return companies.getContent();
+		return new CompaniesResource(companies.getContent());
 	}
 	
 	/**

@@ -1,10 +1,7 @@
 package com.springboot.service.restservice.resource;
 
 import org.springframework.hateoas.ResourceSupport;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
-
-import com.springboot.service.restservice.controller.CompanyController;
-import com.springboot.service.restservice.controller.StockInfoController;
+import org.springframework.hateoas.mvc.BasicLinkBuilder;
 
 /**
  * Wrapper around {@link Company} entity that provides various HATEOS links.
@@ -13,8 +10,9 @@ import com.springboot.service.restservice.controller.StockInfoController;
  *
  */
 public class CompanyResource extends ResourceSupport {
-	private static final String STOCK_INFO = "stockInfo";
-	private static final String SELF = "self";
+	private static final String PATH_STOCK_INFOS = "stockInfos";
+	private static final String PATH_COMPANIES = "companies";
+	private static final String REL_STOCK_INFO = "stockInfo";
 	private final Company company;
 
 	/**
@@ -27,11 +25,10 @@ public class CompanyResource extends ResourceSupport {
 		final String symbol = company.getSymbol();
 		
 		// add HATEOS links
-		Object companyResource = ControllerLinkBuilder.methodOn(CompanyController.class, symbol).getCompany(symbol);
-		add(ControllerLinkBuilder.linkTo(companyResource).withRel(SELF));
-		
-		Object stockInfoResource = ControllerLinkBuilder.methodOn(StockInfoController.class, symbol).getAllStockInfosForComany(symbol, null);
-		add(ControllerLinkBuilder.linkTo(stockInfoResource).withRel(STOCK_INFO));
+		// self
+		add(BasicLinkBuilder.linkToCurrentMapping().slash(PATH_COMPANIES).slash(symbol).withSelfRel());
+		// stock info
+		add(BasicLinkBuilder.linkToCurrentMapping().slash(PATH_COMPANIES).slash(symbol).slash(PATH_STOCK_INFOS).withRel(REL_STOCK_INFO));
 	}
 
 	/**
