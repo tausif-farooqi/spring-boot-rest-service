@@ -36,7 +36,7 @@ public class StockInfoController {
 	/**
 	 * @return
 	 */
-	@GetMapping("/companies/{companySymbol}/stockInfos")
+	@GetMapping("/companies/{symbol}/stockInfos")
 	public List<StockInfo> getAllStockInfosForComany(@PathVariable String symbol, Pageable pageable) {
 		Page<StockInfo> stockInfos = stockInfoRepository.findBySymbol(symbol, pageable);
 		return stockInfos.getContent();
@@ -45,7 +45,7 @@ public class StockInfoController {
 	/**
 	 * @return
 	 */
-	@GetMapping("/companies/{companySymbol}/stockInfos/{id}")
+	@GetMapping("/companies/{symbol}/stockInfos/{id}")
 	public StockInfo getStockInfo(@PathVariable String symbol, @PathVariable Integer id) {
 		Optional<StockInfo> stockInfo = stockInfoRepository.findById(id);
 		return stockInfo.get();
@@ -54,8 +54,8 @@ public class StockInfoController {
 	/**
 	 * @param stockInfo
 	 */
-	@PostMapping("/companies/{companySymbol}/stockInfos")
-	public ResponseEntity<StockInfo> addStockInfo(@RequestBody StockInfo stockInfo) {
+	@PostMapping("/companies/{symbol}/stockInfos")
+	public ResponseEntity<StockInfo> addStockInfo(@RequestBody StockInfo stockInfo, @PathVariable String symbol) {
 		StockInfo createdStockInfo = stockInfoRepository.save(stockInfo);
 		
 		URI uri = ServletUriComponentsBuilder
