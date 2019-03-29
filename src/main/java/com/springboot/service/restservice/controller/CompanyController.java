@@ -1,14 +1,13 @@
 package com.springboot.service.restservice.controller;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -46,10 +45,9 @@ public class CompanyController {
 	 * @return
 	 */
 	@GetMapping(value = "/companies", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
-	public Resources<Resource<Company>> getAllCompanies(Pageable pageable) {
+	public PagedResources<Resource<Company>> getAllCompanies(Pageable pageable) {
 		Page<Company> companiesPage = companyRepository.findAll(pageable);
-		List<Company> companies = companiesPage.getContent();
-		return new Resources<>(CompanyResourceSupport.buildResources(companies));
+		return CompanyResourceSupport.buildResources(companiesPage);
 	}
 	
 	/**
