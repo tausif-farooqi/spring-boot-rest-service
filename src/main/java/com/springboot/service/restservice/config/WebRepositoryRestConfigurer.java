@@ -18,7 +18,8 @@ public class WebRepositoryRestConfigurer implements RepositoryRestConfigurer {
 	
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        config.exposeIdsFor(Company.class);
+        // show ids in the response
+    	config.exposeIdsFor(Company.class);
         config.exposeIdsFor(StockInfo.class);
     }
 }

@@ -1,11 +1,15 @@
 package com.springboot.service.restservice.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,9 +25,8 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.springboot.service.restservice.repository.CompanyRepository;
-import com.springboot.service.restservice.resource.CompaniesResource;
 import com.springboot.service.restservice.resource.Company;
-import com.springboot.service.restservice.resource.CompanyResource;
+import com.springboot.service.restservice.support.CompanyResourceSupport;
 
 /**
  * Controller class that allows operations on the Company resource. We can get/add/update/delete 
@@ -42,25 +45,27 @@ public class CompanyController {
 	/**
 	 * @return
 	 */
-	@GetMapping("/companies")
-	public CompaniesResource getAllCompanies(Pageable pageable) {
-		Page<Company> companies = companyRepository.findAll(pageable);
-		return new CompaniesResource(companies.getContent());
+	@GetMapping(value = "/companies", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
+	public Resources<Resource<Company>> getAllCompanies(Pageable pageable) {
+		Page<Company> companiesPage = companyRepository.findAll(pageable);
+		List<Company> companies = companiesPage.getContent();
+		return new Resources<>(CompanyResourceSupport.buildResources(companies));
 	}
 	
 	/**
 	 * @param symbol
 	 * @return
 	 */
-	@GetMapping("/companies/{symbol}")
-	public CompanyResource getCompany(@PathVariable String symbol) {
-		Optional<Company> company = companyRepository.findById(symbol);
+	@GetMapping(value = "/companies/{symbol}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
+	public Resource<Company> getCompany(@PathVariable String symbol) {
+		Optional<Company> companyEntity = companyRepository.findById(symbol);
 		
-		if (!company.isPresent()) {
+		if (!companyEntity.isPresent()) {
 			// throw exception
 		}
 		
-		return new CompanyResource(company.get());
+		Company company = companyEntity.get();
+		return CompanyResourceSupport.buildResource(company);
 	}
 	
 	/**
