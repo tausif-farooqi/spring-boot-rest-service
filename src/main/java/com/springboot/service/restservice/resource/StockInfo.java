@@ -17,13 +17,20 @@ public class StockInfo {
 	@Id
 	@GeneratedValue
 	Integer id;
-	private Date date;
+	private Date tradeDate;
 	private int volume;
 	private double openValue;
 	private double closeValue;
 	private double highValue;
 	private double lowValue;
 	private String symbol;
+	
+	/**
+	 * Default constructor.
+	 */
+	public StockInfo() {
+		
+	}
 	
 	/**
 	 * @param date Stock trade date
@@ -43,7 +50,7 @@ public class StockInfo {
 			double lowValue,
 			String symbol) {
 		super();
-		this.date = date;
+		this.tradeDate = date;
 		this.volume = volume;
 		this.openValue = openValue;
 		this.closeValue = closeValue;
@@ -52,12 +59,12 @@ public class StockInfo {
 		this.symbol = symbol;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getTradeDate() {
+		return tradeDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setTradeDate(Date date) {
+		this.tradeDate = date;
 	}
 
 	public int getVolume() {

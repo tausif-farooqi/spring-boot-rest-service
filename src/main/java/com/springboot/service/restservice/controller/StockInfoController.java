@@ -1,12 +1,14 @@
 package com.springboot.service.restservice.controller;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.springboot.service.restservice.repository.StockInfoRepository;
 import com.springboot.service.restservice.resource.StockInfo;
+import com.springboot.service.restservice.support.StockInfoResourceSupport;
 
 /**
  * Controller class that allows operations on the StockInfo resource. We can get/add/update/delete 
@@ -36,16 +39,16 @@ public class StockInfoController {
 	/**
 	 * @return
 	 */
-	@GetMapping("/companies/{symbol}/stockInfos")
-	public List<StockInfo> getAllStockInfosForComany(@PathVariable String symbol, Pageable pageable) {
+	@GetMapping(value = "/companies/{symbol}/stockInfos", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
+	public PagedResources<Resource<StockInfo>> getAllStockInfosForComany(@PathVariable String symbol, Pageable pageable) {
 		Page<StockInfo> stockInfos = stockInfoRepository.findBySymbol(symbol, pageable);
-		return stockInfos.getContent();
+		return StockInfoResourceSupport.buildResources(stockInfos) ;
 	}
 	
 	/**
 	 * @return
 	 */
-	@GetMapping("/companies/{symbol}/stockInfos/{id}")
+	@GetMapping(value = "/companies/{symbol}/stockInfos/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
 	public StockInfo getStockInfo(@PathVariable String symbol, @PathVariable Integer id) {
 		Optional<StockInfo> stockInfo = stockInfoRepository.findById(id);
 		return stockInfo.get();
